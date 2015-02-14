@@ -15,7 +15,7 @@ using ProgressiveTweet.Models;
 
 namespace ProgressiveTweet.ViewModels
 {
-    public class MainWindowViewModel : ViewModel
+    public sealed class MainWindowViewModel : NavigativeViewModel
     {
         /* コマンド、プロパティの定義にはそれぞれ
          *
@@ -59,8 +59,36 @@ namespace ProgressiveTweet.ViewModels
          * 自動的にUIDispatcher上での通知に変換されます。変更通知に際してUIDispatcherを操作する必要はありません。
          */
 
+        private Stack<NavigativeViewModel> NavigationHistory { get; set; }
+
+        private NavigativeViewModel _currentViewModel;
+        public NavigativeViewModel CurrentViewModel
+        {
+            get { return _currentViewModel; }
+            private set
+            {
+                _currentViewModel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         public void Initialize()
         {
+            NavigationHistory = new Stack<NavigativeViewModel>();
+        }
+
+
+        public override void GoBack()
+        {
+            if (NavigationHistory.Count == 0) throw new InvalidOperationException("これ以上戻る履歴がありません。");
+            CurrentViewModel = NavigationHistory.Pop();
+        }
+
+        public override void GoForward(NavigativeViewModel dest)
+        {
+            if (CurrentViewModel != null) NavigationHistory.Push(CurrentViewModel);
+            CurrentViewModel = dest;
         }
 
         protected override void Dispose(bool disposing)
