@@ -6,11 +6,20 @@
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
         xmlns:v="clr-namespace:ProgressiveTweet.Views"
         xmlns:vm="clr-namespace:ProgressiveTweet.ViewModels"
-        Title="MainWindow" Height="350" Width="525">
+        Title="ProgressiveTweet"
+        SizeToContent="WidthAndHeight"
+        ShowActivated="False"
+        WindowStyle="None" ResizeMode="NoResize" Topmost="True"
+        Background="Transparent" AllowsTransparency="True">
 
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome UseAeroCaptionButtons="False"
+                      CaptionHeight="0" ResizeBorderThickness="0"/>
+    </WindowChrome.WindowChrome>
 
     <i:Interaction.Triggers>
 
@@ -32,7 +41,7 @@
 
     </i:Interaction.Triggers>
 
-    <Grid>
-
-    </Grid>
+    <Border CornerRadius="10" Opacity="0.8" BorderBrush="#99808080" BorderThickness="1" Background="#CC202020">
+        <ContentControl Margin="8" Focusable="False" Content="{Binding CurrentViewModel}"/>
+    </Border>
 </Window>
