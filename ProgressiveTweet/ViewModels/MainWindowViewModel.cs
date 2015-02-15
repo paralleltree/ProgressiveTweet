@@ -76,6 +76,7 @@ namespace ProgressiveTweet.ViewModels
         public void Initialize()
         {
             NavigationHistory = new Stack<NavigativeViewModel>();
+            CurrentViewModel = new RootThumbViewModel(this);
         }
 
 

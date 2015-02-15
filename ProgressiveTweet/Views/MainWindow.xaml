@@ -21,6 +21,13 @@
                       CaptionHeight="0" ResizeBorderThickness="0"/>
     </WindowChrome.WindowChrome>
 
+    <Window.Resources>
+        <!-- Definitions of mappings inner View and ViewModel -->
+        <DataTemplate DataType="{x:Type vm:RootThumbViewModel}">
+            <v:RootThumb/>
+        </DataTemplate>
+    </Window.Resources>
+
     <i:Interaction.Triggers>
 
         <!--Viewに特別な要件が存在しない限りは、トリガーやアクションの自作にこだわらず積極的にコードビハインドを使いましょう -->
