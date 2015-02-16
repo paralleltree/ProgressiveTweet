@@ -73,7 +73,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ViewModels\NavigativeViewModel.cs" />
+    <Compile Include="ViewModels\Navigative\RootMenuViewModel.cs" />
     <Compile Include="ViewModels\Navigative\RootThumbViewModel.cs" />
+    <Compile Include="Views\Navigative\RootMenu.xaml.cs">
+      <DependentUpon>RootMenu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Navigative\RootThumb.xaml.cs">
       <DependentUpon>RootThumb.xaml</DependentUpon>
     </Compile>
@@ -94,6 +98,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\Themes\NavigativeButtonDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Navigative\RootMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

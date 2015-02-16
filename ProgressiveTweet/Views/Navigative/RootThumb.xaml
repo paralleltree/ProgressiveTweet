@@ -10,7 +10,9 @@
             <ResourceDictionary Source="../Themes/NavigativeButtonDictionary.xaml"/>
         </Grid.Resources>
 
-        <Button Background="Transparent" Style="{StaticResource NavigativeButtonStyle}">
+        <Button Background="Transparent"
+                Command="{Binding GoRootMenuCommand}"
+                Style="{StaticResource NavigativeButtonStyle}">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Grid>

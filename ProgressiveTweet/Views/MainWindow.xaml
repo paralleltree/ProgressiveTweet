@@ -26,6 +26,9 @@
         <DataTemplate DataType="{x:Type vm:RootThumbViewModel}">
             <v:RootThumb/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:RootMenuViewModel}">
+            <v:RootMenu/>
+        </DataTemplate>
     </Window.Resources>
 
     <i:Interaction.Triggers>
