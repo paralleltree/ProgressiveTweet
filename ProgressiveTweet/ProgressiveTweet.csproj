@@ -85,6 +85,10 @@
     <Compile Include="Views\Navigative\SettingMenu.xaml.cs">
       <DependentUpon>SettingMenu.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\Themes\ControlDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
