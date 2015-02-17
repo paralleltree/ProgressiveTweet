@@ -18,13 +18,36 @@ namespace ProgressiveTweet.ViewModels
     public class RootMenuViewModel : NavigativeViewModel
     {
         private Model Model { get; set; }
+        private SettingMenuViewModel SettingMenu { get; set; }
 
         public RootMenuViewModel(NavigativeViewModel host)
             : base(host)
         {
             this.Model = Model.Instance;
+            SettingMenu = new SettingMenuViewModel(this);
         }
 
+
+        #region GoSettingMenuCommand
+        private ViewModelCommand _GoSettingMenuCommand;
+
+        public ViewModelCommand GoSettingMenuCommand
+        {
+            get
+            {
+                if (_GoSettingMenuCommand == null)
+                {
+                    _GoSettingMenuCommand = new ViewModelCommand(GoSettingMenu);
+                }
+                return _GoSettingMenuCommand;
+            }
+        }
+
+        public void GoSettingMenu()
+        {
+            this.GoForward(SettingMenu);
+        }
+        #endregion
 
         #region GoBackCommand
         private ViewModelCommand _GoBackCommand;

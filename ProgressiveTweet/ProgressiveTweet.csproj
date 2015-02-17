@@ -75,11 +75,15 @@
     <Compile Include="ViewModels\NavigativeViewModel.cs" />
     <Compile Include="ViewModels\Navigative\RootMenuViewModel.cs" />
     <Compile Include="ViewModels\Navigative\RootThumbViewModel.cs" />
+    <Compile Include="ViewModels\Navigative\SettingMenuViewModel.cs" />
     <Compile Include="Views\Navigative\RootMenu.xaml.cs">
       <DependentUpon>RootMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Navigative\RootThumb.xaml.cs">
       <DependentUpon>RootThumb.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Navigative\SettingMenu.xaml.cs">
+      <DependentUpon>SettingMenu.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -106,6 +110,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Navigative\RootThumb.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Navigative\SettingMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

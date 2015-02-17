@@ -29,6 +29,9 @@
         <DataTemplate DataType="{x:Type vm:RootMenuViewModel}">
             <v:RootMenu/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SettingMenuViewModel}">
+            <v:SettingMenu/>
+        </DataTemplate>
     </Window.Resources>
 
     <i:Interaction.Triggers>
