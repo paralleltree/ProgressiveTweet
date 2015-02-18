@@ -18,6 +18,7 @@ namespace ProgressiveTweet.ViewModels
     public class RootMenuViewModel : NavigativeViewModel
     {
         private Model Model { get; set; }
+        private TweetCreationViewModel TweetCreation { get; set; }
         private SettingMenuViewModel SettingMenu { get; set; }
 
         public RootMenuViewModel(NavigativeViewModel host)
@@ -27,6 +28,39 @@ namespace ProgressiveTweet.ViewModels
             SettingMenu = new SettingMenuViewModel(this);
         }
 
+
+        #region OpenTweetCreationWindowCommand
+        private ViewModelCommand _OpenTweetCreationWindowCommand;
+
+        public ViewModelCommand OpenTweetCreationWindowCommand
+        {
+            get
+            {
+                if (_OpenTweetCreationWindowCommand == null)
+                {
+                    _OpenTweetCreationWindowCommand = new ViewModelCommand(OpenTweetCreationWindow, CanOpenTweetCreationWindow);
+                }
+                return _OpenTweetCreationWindowCommand;
+            }
+        }
+
+        public bool CanOpenTweetCreationWindow()
+        {
+            return Model.CurrentToken != null;
+        }
+
+        public void OpenTweetCreationWindow()
+        {
+            if (TweetCreation == null || TweetCreation.IsSent)
+                TweetCreation = new TweetCreationViewModel();
+
+            Messenger.Raise(new TransitionMessage()
+            {
+                MessageKey = "OpenTweetCreationWindow",
+                TransitionViewModel = TweetCreation
+            });
+        }
+        #endregion
 
         #region GoSettingMenuCommand
         private ViewModelCommand _GoSettingMenuCommand;
