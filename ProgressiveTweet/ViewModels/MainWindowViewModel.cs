@@ -62,5 +62,11 @@ namespace ProgressiveTweet.ViewModels
         public void Initialize()
         {
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) Model.Instance.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }
