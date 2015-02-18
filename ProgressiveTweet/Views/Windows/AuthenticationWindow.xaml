@@ -6,6 +6,7 @@
         xmlns:vm="clr-namespace:ProgressiveTweet.ViewModels"
         Title="アプリ認証"
         Background="#FF202020"
+        FocusManager.FocusedElement="{Binding ElementName=pin}"
         SizeToContent="Height" Width="340"
         WindowStyle="SingleBorderWindow" ResizeMode="NoResize">
 
@@ -55,10 +56,10 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox Margin="6" TextAlignment="Center"
+            <TextBox Margin="6" TextAlignment="Center" Name="pin"
                      Text="{Binding Pin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <Button Grid.Column="1" Margin="4" Content="OK" Width="60"
+            <Button Grid.Column="1" Margin="4" Content="OK" Width="60" IsDefault="True"
                     Command="{Binding AuthenticateCommand}"/>
         </Grid>
     </Grid>
