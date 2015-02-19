@@ -6,6 +6,7 @@
         xmlns:vm="clr-namespace:ProgressiveTweet.ViewModels"
         Title="アプリ認証"
         Background="#FF202020"
+        Icon="/ProgressiveTweet;component/Resources/MainIcon.ico"
         FocusManager.FocusedElement="{Binding ElementName=pin}"
         SizeToContent="Height" Width="340"
         WindowStyle="SingleBorderWindow" ResizeMode="NoResize">
