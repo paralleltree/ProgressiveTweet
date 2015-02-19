@@ -61,6 +61,11 @@ namespace ProgressiveTweet.ViewModels
 
         private Stack<NavigativeViewModel> NavigationHistory { get; set; }
 
+        public bool IsCurrentRoot
+        {
+            get { return NavigationHistory.Count == 0; }
+        }
+
         private NavigativeViewModel _currentViewModel;
         public NavigativeViewModel CurrentViewModel
         {
@@ -73,9 +78,13 @@ namespace ProgressiveTweet.ViewModels
         }
 
 
-        public void Initialize()
+        public MainWindowViewModel()
         {
             NavigationHistory = new Stack<NavigativeViewModel>();
+        }
+
+        public void Initialize()
+        {
             CurrentViewModel = new RootThumbViewModel(this);
         }
 
