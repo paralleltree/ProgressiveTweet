@@ -11,6 +11,7 @@
         ShowActivated="False"
         WindowStyle="None" ResizeMode="NoResize" Topmost="True"
         Background="Transparent" AllowsTransparency="True"
+        Icon="/ProgressiveTweet;component/Resources/MainIcon.ico"
         SizeChanged="Window_SizeChanged">
 
     <Window.DataContext>
