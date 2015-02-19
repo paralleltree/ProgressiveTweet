@@ -6,11 +6,34 @@
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
         xmlns:v="clr-namespace:ProgressiveTweet.Views"
         xmlns:vm="clr-namespace:ProgressiveTweet.ViewModels"
-        Title="MainWindow" Height="350" Width="525">
+        Title="ProgressiveTweet"
+        SizeToContent="WidthAndHeight"
+        ShowActivated="False"
+        WindowStyle="None" ResizeMode="NoResize" Topmost="True"
+        Background="Transparent" AllowsTransparency="True"
+        SizeChanged="Window_SizeChanged">
 
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome UseAeroCaptionButtons="False"
+                      CaptionHeight="0" ResizeBorderThickness="0"/>
+    </WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <!-- Definitions of mappings inner View and ViewModel -->
+        <DataTemplate DataType="{x:Type vm:RootThumbViewModel}">
+            <v:RootThumb/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:RootMenuViewModel}">
+            <v:RootMenu/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SettingMenuViewModel}">
+            <v:SettingMenu/>
+        </DataTemplate>
+    </Window.Resources>
 
     <i:Interaction.Triggers>
 
@@ -32,7 +55,23 @@
 
     </i:Interaction.Triggers>
 
-    <Grid>
-
-    </Grid>
+    <Border Name="border" CornerRadius="10" BorderBrush="#99808080" BorderThickness="1" Background="#CC202020">
+        <ContentControl Margin="8" Focusable="False" Name="content"
+                        Content="{Binding CurrentViewModel, NotifyOnTargetUpdated=True}"/>
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="TargetUpdated">
+                <ei:ControlStoryboardAction>
+                    <ei:ControlStoryboardAction.Storyboard>
+                        <Storyboard>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="content"
+                                                           Storyboard.TargetProperty="Opacity">
+                                <LinearDoubleKeyFrame KeyTime="0:0:0.0" Value="0.2"/>
+                                <LinearDoubleKeyFrame KeyTime="0:0:0.4" Value="1.0"/>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </ei:ControlStoryboardAction.Storyboard>
+                </ei:ControlStoryboardAction>
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+    </Border>
 </Window>
