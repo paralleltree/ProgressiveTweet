@@ -72,10 +72,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\Windows\AuthenticationViewModel.cs" />
     <Compile Include="ViewModels\NavigativeViewModel.cs" />
     <Compile Include="ViewModels\Navigative\RootMenuViewModel.cs" />
     <Compile Include="ViewModels\Navigative\RootThumbViewModel.cs" />
     <Compile Include="ViewModels\Navigative\SettingMenuViewModel.cs" />
+    <Compile Include="ViewModels\Windows\TweetCreationViewModel.cs" />
+    <Compile Include="Views\Windows\AuthenticationWindow.xaml.cs">
+      <DependentUpon>AuthenticationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Navigative\RootMenu.xaml.cs">
       <DependentUpon>RootMenu.xaml</DependentUpon>
     </Compile>
@@ -85,6 +90,17 @@
     <Compile Include="Views\Navigative\SettingMenu.xaml.cs">
       <DependentUpon>SettingMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Windows\TweetCreationWindow.xaml.cs">
+      <DependentUpon>TweetCreationWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\Themes\ControlDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Windows\AuthenticationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -114,6 +130,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Navigative\SettingMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Windows\TweetCreationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

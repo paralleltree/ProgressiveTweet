@@ -9,6 +9,12 @@
              mc:Ignorable="d"
              Height="300" Width="300">
 
+    <i:Interaction.Triggers>
+        <l:InteractionMessageTrigger MessageKey="OpenTweetCreationWindow" Messenger="{Binding Messenger}">
+            <l:TransitionInteractionMessageAction WindowType="{x:Type v:TweetCreationWindow}" Mode="Normal"/>
+        </l:InteractionMessageTrigger>
+    </i:Interaction.Triggers>
+
     <Grid>
         <Grid.Resources>
             <ResourceDictionary Source="../Themes/NavigativeButtonDictionary.xaml"/>
@@ -26,6 +32,7 @@
         </Grid.ColumnDefinitions>
 
         <Button Grid.Row="1" Grid.Column="0" Margin="6" Name="Tweet"
+                Command="{Binding OpenTweetCreationWindowCommand}"
                 Style="{StaticResource NavigativeCaptionButtonStyle}">
             <Path Style="{StaticResource IconPathStyle}"
                   Data="M6 34.5V42h7.5l22.13-22.13-7.5-7.5L6 34.5zm35.41-20.41c.78-.78.78-2.05 0-2.83l-4.67-4.67c-.78-.78-2.05-.78-2.83 0l-3.66 3.66 7.5 7.5 3.66-3.66z"/>
