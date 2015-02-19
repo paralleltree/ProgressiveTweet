@@ -1,0 +1,67 @@
+﻿<Window x:Class="ProgressiveTweet.Views.AuthenticationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+        xmlns:vm="clr-namespace:ProgressiveTweet.ViewModels"
+        Title="アプリ認証"
+        Background="#FF202020"
+        Icon="/ProgressiveTweet;component/Resources/MainIcon.ico"
+        FocusManager.FocusedElement="{Binding ElementName=pin}"
+        SizeToContent="Height" Width="340"
+        WindowStyle="SingleBorderWindow" ResizeMode="NoResize">
+
+    <Window.DataContext>
+        <vm:AuthenticationViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <ResourceDictionary Source="../Themes/ControlDictionary.xaml"/>
+    </Window.Resources>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="ContentRendered">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closed">
+            <l:DataContextDisposeAction/>
+        </i:EventTrigger>
+
+        <l:InteractionMessageTrigger MessageKey="Information" Messenger="{Binding Messenger}">
+            <l:InformationDialogInteractionMessageAction/>
+        </l:InteractionMessageTrigger>
+        <l:InteractionMessageTrigger MessageKey="Close" Messenger="{Binding Messenger}">
+            <l:WindowInteractionMessageAction>
+                <l:DirectInteractionMessage>
+                    <l:WindowActionMessage Action="Close"/>
+                </l:DirectInteractionMessage>
+            </l:WindowInteractionMessageAction>
+        </l:InteractionMessageTrigger>
+    </i:Interaction.Triggers>
+
+
+    <Grid Margin="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock TextAlignment="Center" Margin="2">
+            アプリケーションを認証し、<LineBreak/>
+            表示されたPINコードを入力してください。
+        </TextBlock>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox Margin="6" TextAlignment="Center" Name="pin"
+                     Text="{Binding Pin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Button Grid.Column="1" Margin="4" Content="OK" Width="60" IsDefault="True"
+                    Command="{Binding AuthenticateCommand}"/>
+        </Grid>
+    </Grid>
+</Window>
