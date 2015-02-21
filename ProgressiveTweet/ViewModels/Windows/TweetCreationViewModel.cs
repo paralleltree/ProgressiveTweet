@@ -26,9 +26,9 @@ namespace ProgressiveTweet.ViewModels
             set { Source.Text = value; }
         }
 
-        public int RemainingCount
+        public int RemainingLength
         {
-            get { return 140 - Text.Length; }
+            get { return Source.RemainingLength; }
         }
 
         public bool IsSent { get { return Source.IsSent; } }
@@ -55,8 +55,6 @@ namespace ProgressiveTweet.ViewModels
                     switch (e.PropertyName)
                     {
                         case "Text":
-                            RaisePropertyChanged("Text");
-                            RaisePropertyChanged("RemainingCount");
                             TweetCommand.RaiseCanExecuteChanged();
                             return;
                     }
@@ -82,7 +80,7 @@ namespace ProgressiveTweet.ViewModels
 
         public bool CanTweet()
         {
-            return RemainingCount < 140 && RemainingCount >= 0 && !IsSending;
+            return Source.IsValid && !IsSending;
         }
 
         public void Tweet()

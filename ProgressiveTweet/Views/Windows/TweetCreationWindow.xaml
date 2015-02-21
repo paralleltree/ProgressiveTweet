@@ -45,7 +45,7 @@
         <Grid Grid.Row="1">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <TextBlock Margin="6" VerticalAlignment="Center"
-                           Text="{Binding RemainingCount}"/>
+                           Text="{Binding RemainingLength}"/>
                 <Button Margin="2" Padding="2" Content="ツイート"
                         Command="{Binding TweetCommand}"/>
             </StackPanel>
