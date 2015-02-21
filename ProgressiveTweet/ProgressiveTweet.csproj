@@ -76,6 +76,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\TwitterText.cs" />
     <Compile Include="ViewModels\Windows\AuthenticationViewModel.cs" />
     <Compile Include="ViewModels\NavigativeViewModel.cs" />
     <Compile Include="ViewModels\Navigative\RootMenuViewModel.cs" />
