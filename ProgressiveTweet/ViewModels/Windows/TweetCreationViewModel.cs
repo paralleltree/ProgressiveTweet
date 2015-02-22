@@ -26,12 +26,22 @@ namespace ProgressiveTweet.ViewModels
             set { Source.Text = value; }
         }
 
+        public ReadOnlyDispatcherCollection<System.IO.Stream> Media { get; private set; }
+
+        public bool HasMedia
+        {
+            get { return Source.HasMedia; }
+        }
+
         public int RemainingLength
         {
             get { return Source.RemainingLength; }
         }
 
-        public bool IsSent { get { return Source.IsSent; } }
+        public bool IsSent
+        {
+            get { return Source.IsSent; }
+        }
 
         public bool IsSending
         {
@@ -54,12 +64,13 @@ namespace ProgressiveTweet.ViewModels
                 {
                     switch (e.PropertyName)
                     {
-                        case "Text":
+                        case "IsValid":
                             TweetCommand.RaiseCanExecuteChanged();
                             return;
                     }
                     RaisePropertyChanged(e.PropertyName);
                 }));
+            Media = new ReadOnlyDispatcherCollection<System.IO.Stream>(Source.Media);
         }
 
 
@@ -105,6 +116,32 @@ namespace ProgressiveTweet.ViewModels
                 }
                 IsSending = false;
             });
+        }
+        #endregion
+
+        #region RemoveMediaCommand
+        private ListenerCommand<System.IO.Stream> _RemoveMediaCommand;
+
+        public ListenerCommand<System.IO.Stream> RemoveMediaCommand
+        {
+            get
+            {
+                if (_RemoveMediaCommand == null)
+                {
+                    _RemoveMediaCommand = new ListenerCommand<System.IO.Stream>(RemoveMedia, CanRemoveMedia);
+                }
+                return _RemoveMediaCommand;
+            }
+        }
+
+        public bool CanRemoveMedia()
+        {
+            return Source.HasMedia;
+        }
+
+        public void RemoveMedia(System.IO.Stream parameter)
+        {
+            Source.Media.Remove(parameter);
         }
         #endregion
     }
