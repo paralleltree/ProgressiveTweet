@@ -4,6 +4,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
         xmlns:vm="clr-namespace:ProgressiveTweet.ViewModels"
+        xmlns:b="clr-namespace:ProgressiveTweet.Views.Behaviors"
         xmlns:conv="clr-namespace:ProgressiveTweet.Views.Converters"
         Title="ツイートする"
         Height="200" Width="400"
@@ -98,6 +99,10 @@
             <GridSplitter Grid.Row="1" Background="Gray" Height="1" HorizontalAlignment="Stretch"/>
 
             <StackPanel Grid.Row="2" Orientation="Horizontal" Background="LightCyan" AllowDrop="True">
+                <i:Interaction.Behaviors>
+                    <b:AcceptDropBehavior Description="{Binding DragDropDescription}"/>
+                </i:Interaction.Behaviors>
+
                 <ItemsControl Margin="2" ItemsSource="{Binding Media}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

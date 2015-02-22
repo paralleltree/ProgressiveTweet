@@ -13,6 +13,7 @@ using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
 using ProgressiveTweet.Models;
+using ProgressiveTweet.Views.Behaviors;
 
 namespace ProgressiveTweet.ViewModels
 {
@@ -55,6 +56,11 @@ namespace ProgressiveTweet.ViewModels
         }
         private bool _isSending;
 
+        /// <summary>
+        /// Viewでのドラッグドロップを制御するDescriptionを格納します。
+        /// </summary>
+        public DragDropDescription DragDropDescription { get; private set; }
+
 
         public TweetCreationViewModel()
         {
@@ -71,6 +77,29 @@ namespace ProgressiveTweet.ViewModels
                     RaisePropertyChanged(e.PropertyName);
                 }));
             Media = new ReadOnlyDispatcherCollection<System.IO.Stream>(Source.Media);
+
+            DragDropDescription = new DragDropDescription();
+            DragDropDescription.DragOver += e =>
+            {
+                if (!e.AllowedEffects.HasFlag(System.Windows.DragDropEffects.Copy)) return;
+
+                if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop, true))
+                    e.Effects = System.Windows.DragDropEffects.Copy;
+                else
+                    e.Effects = System.Windows.DragDropEffects.None;
+
+                e.Handled = true;
+            };
+            DragDropDescription.Drop += e =>
+            {
+                var data = e.Data.GetData(System.Windows.DataFormats.FileDrop) as IEnumerable<string>;
+                var files = data.Where(p => System.Text.RegularExpressions.Regex.IsMatch(p,
+                    @"\.(png|jpe?g|gif)\Z",
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase));
+
+                foreach (string path in files)
+                    Source.Media.Add(new System.IO.MemoryStream(System.IO.File.ReadAllBytes(path)));
+            };
         }
 
 
