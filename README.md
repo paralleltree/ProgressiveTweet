@@ -4,7 +4,7 @@ ProgressiveTweetは、[G2U](https://github.com/0V)氏作成の[AssistiveTweet](h
 
 ## 内容
  * やっぱり[アレ](http://support.apple.com/ja-jp/HT202658)っぽいUIです。
- * 現在はテキストのみのツイートしかできません。
+ * 最低限の画像付きツイートができます。
 
 ## ライセンス
  * ProgressiveTweetはMITライセンスです。
@@ -13,7 +13,7 @@ ProgressiveTweetは、[G2U](https://github.com/0V)氏作成の[AssistiveTweet](h
   |ライブラリ |ライセンス |
   |:----------|:---------:|
   |[Livet](https://github.com/ugaya40/Livet)|zlib/libpng|
-  |[CoreTweet](http://coretweet.github.io/)|MIT License|
+  |[CoreTweet](http://coretweet.github.io)|MIT License|
   |[Json.NET](http://www.newtonsoft.com/json)|MIT License|
   |[Google Material Design Icons](https://github.com/google/material-design-icons)|[CC-BY](https://raw.githubusercontent.com/google/material-design-icons/master/LICENSE)|
 
