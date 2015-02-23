@@ -18,24 +18,27 @@ namespace ProgressiveTweet.Models
         public const int MAX_TWEET_LENGTH = 140;
         public static int ShortUrlLength = 22;
         public static int ShortUrlLengthHttps = 23;
+        public static int CharactersReservedPerMedia = 23;
 
         /// <summary>
         /// テキストがツイートとして有効であるかどうかを示す値を返します。
         /// </summary>
         /// <param name="text">判定するテキスト</param>
+        /// <param name="hasMedia">メディアを含むかどうかを示すbool値</param>
         /// <returns>有効なツイートであるかどうかを示すbool値</returns>
-        public static bool IsValidTweet(string text)
+        public static bool IsValidTweet(string text, bool hasMedia)
         {
-            if (text == null || text.Length == 0) return false;
-            return GetTweetLength(text) <= MAX_TWEET_LENGTH;
+            if ((text == null || text.Length == 0) && !hasMedia) return false;
+            return GetTweetLength(text, hasMedia) <= MAX_TWEET_LENGTH;
         }
 
         /// <summary>
         /// ツイートとしてのテキストの文字数を返します。
         /// </summary>
         /// <param name="text">文字数を計測するテキスト</param>
+        /// <param name="hasMedia">メディアを含むかどうかを示すbool値</param>
         /// <returns>ツイートとしての文字数</returns>
-        public static int GetTweetLength(string text)
+        public static int GetTweetLength(string text, bool hasMedia)
         {
             int length = new StringInfo(text.Replace("\r", "")).LengthInTextElements;
 
@@ -45,6 +48,7 @@ namespace ProgressiveTweet.Models
                 length += m.Value.ToLower().StartsWith("https://") ? ShortUrlLengthHttps : ShortUrlLength;
             }
 
+            if (hasMedia) length += CharactersReservedPerMedia;
             return length;
         }
 
@@ -52,10 +56,11 @@ namespace ProgressiveTweet.Models
         /// ツイートとしてのテキストに対して入力可能な残り文字数を返します。
         /// </summary>
         /// <param name="text">残り文字数を計測するテキスト</param>
+        /// <param name="hasMedia">メディアを含むかどうかを示すbool値</param>
         /// <returns>入力可能な残り文字数</returns>
-        public static int GetRemainingTweetLength(string text)
+        public static int GetRemainingTweetLength(string text, bool hasMedia)
         {
-            return MAX_TWEET_LENGTH - GetTweetLength(text);
+            return MAX_TWEET_LENGTH - GetTweetLength(text, hasMedia);
         }
 
 

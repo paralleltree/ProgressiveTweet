@@ -83,6 +83,8 @@
     <Compile Include="ViewModels\Navigative\RootThumbViewModel.cs" />
     <Compile Include="ViewModels\Navigative\SettingMenuViewModel.cs" />
     <Compile Include="ViewModels\Windows\TweetCreationViewModel.cs" />
+    <Compile Include="Views\Behaviors\AcceptDropBehavior.cs" />
+    <Compile Include="Views\Converters\ImageStreamConverter.cs" />
     <Compile Include="Views\Windows\AuthenticationWindow.xaml.cs">
       <DependentUpon>AuthenticationWindow.xaml</DependentUpon>
     </Compile>
