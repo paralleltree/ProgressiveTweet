@@ -13,6 +13,7 @@ using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
 using ProgressiveTweet.Models;
+using ProgressiveTweet.Views.Behaviors;
 
 namespace ProgressiveTweet.ViewModels
 {
@@ -26,12 +27,22 @@ namespace ProgressiveTweet.ViewModels
             set { Source.Text = value; }
         }
 
-        public int RemainingCount
+        public ReadOnlyDispatcherCollection<System.IO.Stream> Media { get; private set; }
+
+        public bool HasMedia
         {
-            get { return 140 - Text.Length; }
+            get { return Source.HasMedia; }
         }
 
-        public bool IsSent { get { return Source.IsSent; } }
+        public int RemainingLength
+        {
+            get { return Source.RemainingLength; }
+        }
+
+        public bool IsSent
+        {
+            get { return Source.IsSent; }
+        }
 
         public bool IsSending
         {
@@ -45,6 +56,11 @@ namespace ProgressiveTweet.ViewModels
         }
         private bool _isSending;
 
+        /// <summary>
+        /// Viewでのドラッグドロップを制御するDescriptionを格納します。
+        /// </summary>
+        public DragDropDescription DragDropDescription { get; private set; }
+
 
         public TweetCreationViewModel()
         {
@@ -54,14 +70,36 @@ namespace ProgressiveTweet.ViewModels
                 {
                     switch (e.PropertyName)
                     {
-                        case "Text":
-                            RaisePropertyChanged("Text");
-                            RaisePropertyChanged("RemainingCount");
+                        case "IsValid":
                             TweetCommand.RaiseCanExecuteChanged();
                             return;
                     }
                     RaisePropertyChanged(e.PropertyName);
                 }));
+            Media = new ReadOnlyDispatcherCollection<System.IO.Stream>(Source.Media);
+
+            DragDropDescription = new DragDropDescription();
+            DragDropDescription.DragOver += e =>
+            {
+                if (!e.AllowedEffects.HasFlag(System.Windows.DragDropEffects.Copy)) return;
+
+                if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop, true))
+                    e.Effects = System.Windows.DragDropEffects.Copy;
+                else
+                    e.Effects = System.Windows.DragDropEffects.None;
+
+                e.Handled = true;
+            };
+            DragDropDescription.Drop += e =>
+            {
+                var data = e.Data.GetData(System.Windows.DataFormats.FileDrop) as IEnumerable<string>;
+                var files = data.Where(p => System.Text.RegularExpressions.Regex.IsMatch(p,
+                    @"\.(png|jpe?g|gif)\Z",
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase));
+
+                foreach (string path in files)
+                    Source.Media.Add(new System.IO.MemoryStream(System.IO.File.ReadAllBytes(path)));
+            };
         }
 
 
@@ -82,7 +120,7 @@ namespace ProgressiveTweet.ViewModels
 
         public bool CanTweet()
         {
-            return RemainingCount < 140 && RemainingCount >= 0 && !IsSending;
+            return Source.IsValid && !IsSending;
         }
 
         public void Tweet()
@@ -107,6 +145,71 @@ namespace ProgressiveTweet.ViewModels
                 }
                 IsSending = false;
             });
+        }
+        #endregion
+
+        #region PasteFromClipboardCommand
+        private ViewModelCommand _PasteFromClipboardCommand;
+
+        public ViewModelCommand PasteFromClipboardCommand
+        {
+            get
+            {
+                if (_PasteFromClipboardCommand == null)
+                {
+                    _PasteFromClipboardCommand = new ViewModelCommand(PasteFromClipboard);
+                }
+                return _PasteFromClipboardCommand;
+            }
+        }
+
+        public void PasteFromClipboard()
+        {
+            if (!System.Windows.Clipboard.ContainsImage()) return;
+
+            var image = System.Windows.Clipboard.GetImage();
+            var encoder = new System.Windows.Media.Imaging.BmpBitmapEncoder(); // PngBitmapEncoder doesn't work
+            encoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(image));
+
+            // convert to png
+            using (var source = new System.IO.MemoryStream())
+            {
+                encoder.Save(source);
+
+                using (var bmp = new System.Drawing.Bitmap(source))
+                {
+                    var stream = new System.IO.MemoryStream();
+                    bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+
+                    Source.Media.Add(stream);
+                }
+            }
+        }
+        #endregion
+
+        #region RemoveMediaCommand
+        private ListenerCommand<System.IO.Stream> _RemoveMediaCommand;
+
+        public ListenerCommand<System.IO.Stream> RemoveMediaCommand
+        {
+            get
+            {
+                if (_RemoveMediaCommand == null)
+                {
+                    _RemoveMediaCommand = new ListenerCommand<System.IO.Stream>(RemoveMedia, CanRemoveMedia);
+                }
+                return _RemoveMediaCommand;
+            }
+        }
+
+        public bool CanRemoveMedia()
+        {
+            return Source.HasMedia;
+        }
+
+        public void RemoveMedia(System.IO.Stream parameter)
+        {
+            Source.Media.Remove(parameter);
         }
         #endregion
     }

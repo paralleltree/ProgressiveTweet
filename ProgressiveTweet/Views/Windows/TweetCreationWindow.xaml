@@ -4,6 +4,8 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
         xmlns:vm="clr-namespace:ProgressiveTweet.ViewModels"
+        xmlns:b="clr-namespace:ProgressiveTweet.Views.Behaviors"
+        xmlns:conv="clr-namespace:ProgressiveTweet.Views.Converters"
         Title="ツイートする"
         Height="200" Width="400"
         Background="#FF606060"
@@ -14,6 +16,56 @@
     <Window.InputBindings>
         <KeyBinding Command="{Binding TweetCommand}" Gesture="Ctrl+Enter"/>
     </Window.InputBindings>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Themes/ControlDictionary.xaml"/>
+                <ResourceDictionary>
+                    <conv:ImageStreamConverter x:Key="ImageStreamConverter"/>
+                    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+                    <Style x:Key="OverlayButtonStyle" TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Name="border" Background="{TemplateBinding Background}">
+                                        <ContentPresenter Content="{TemplateBinding Content}" Focusable="False"
+                                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup Name="CommonStates">
+                                                <VisualState Name="Normal">
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="border"
+                                                                         Storyboard.TargetProperty="Opacity"
+                                                                         To="0" Duration="0"/>
+                                                    </Storyboard>
+                                                </VisualState>
+                                                <VisualState Name="MouseOver">
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="border"
+                                                                         Storyboard.TargetProperty="Opacity"
+                                                                         To="0.4" Duration="0"/>
+                                                    </Storyboard>
+                                                </VisualState>
+                                                <VisualState Name="Pressed">
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="border"
+                                                                         Storyboard.TargetProperty="Opacity"
+                                                                         To="0.6" Duration="0"/>
+                                                    </Storyboard>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
     <i:Interaction.Triggers>
         <l:InteractionMessageTrigger MessageKey="Information" Messenger="{Binding Messenger}">
@@ -30,22 +82,60 @@
 
 
     <Grid Margin="6">
-        <Grid.Resources>
-            <ResourceDictionary Source="../Themes/ControlDictionary.xaml"/>
-        </Grid.Resources>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBox Grid.Row="0" Margin="3" AcceptsReturn="True" Name="text"
-                 Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Grid Margin="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+
+            <TextBox Grid.Row="0" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Name="text"
+                     Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <GridSplitter Grid.Row="1" Background="Gray" Height="1" HorizontalAlignment="Stretch"/>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Background="LightCyan" AllowDrop="True">
+                <i:Interaction.Behaviors>
+                    <b:AcceptDropBehavior Description="{Binding DragDropDescription}"/>
+                </i:Interaction.Behaviors>
+
+                <Button Margin="6" Background="Peru"
+                        ToolTip="クリップボードから貼り付け"
+                        Command="{Binding PasteFromClipboardCommand}">
+                    <Path Fill="White" Stretch="Uniform" Data="M38 4h-8.37c-.82-2.32-3.02-4-5.63-4s-4.81 1.68-5.63 4H10C7.79 4 6 5.79 6 8v32c0 2.21 1.79 4 4 4h28c2.21 0 4-1.79 4-4V8c0-2.21-1.79-4-4-4zM24 4c1.1 0 2 .89 2 2s-.9 2-2 2-2-.89-2-2 .9-2 2-2zm14 36H10V8h4v6h20V8h4v32z"/>
+                </Button>
+                <Rectangle Width="1" Fill="Gray"/>
+
+                <ItemsControl Margin="2" ItemsSource="{Binding Media}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Image RenderOptions.BitmapScalingMode="HighQuality" StretchDirection="DownOnly" UseLayoutRounding="True"
+                                       Source="{Binding Converter={StaticResource ImageStreamConverter}}"/>
+                                <Button Content="r" FontFamily="Marlett" Foreground="White" Background="Black"
+                                        Command="{Binding Path=DataContext.RemoveMediaCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"
+                                        Style="{StaticResource OverlayButtonStyle}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
 
         <Grid Grid.Row="1">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <TextBlock Margin="6" VerticalAlignment="Center"
-                           Text="{Binding RemainingCount}"/>
+                           Text="{Binding RemainingLength}"/>
                 <Button Margin="2" Padding="2" Content="ツイート"
                         Command="{Binding TweetCommand}"/>
             </StackPanel>
