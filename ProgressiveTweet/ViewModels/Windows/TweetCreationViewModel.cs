@@ -148,6 +148,45 @@ namespace ProgressiveTweet.ViewModels
         }
         #endregion
 
+        #region PasteFromClipboardCommand
+        private ViewModelCommand _PasteFromClipboardCommand;
+
+        public ViewModelCommand PasteFromClipboardCommand
+        {
+            get
+            {
+                if (_PasteFromClipboardCommand == null)
+                {
+                    _PasteFromClipboardCommand = new ViewModelCommand(PasteFromClipboard);
+                }
+                return _PasteFromClipboardCommand;
+            }
+        }
+
+        public void PasteFromClipboard()
+        {
+            if (!System.Windows.Clipboard.ContainsImage()) return;
+
+            var image = System.Windows.Clipboard.GetImage();
+            var encoder = new System.Windows.Media.Imaging.BmpBitmapEncoder(); // PngBitmapEncoder doesn't work
+            encoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(image));
+
+            // convert to png
+            using (var source = new System.IO.MemoryStream())
+            {
+                encoder.Save(source);
+
+                using (var bmp = new System.Drawing.Bitmap(source))
+                {
+                    var stream = new System.IO.MemoryStream();
+                    bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+
+                    Source.Media.Add(stream);
+                }
+            }
+        }
+        #endregion
+
         #region RemoveMediaCommand
         private ListenerCommand<System.IO.Stream> _RemoveMediaCommand;
 
