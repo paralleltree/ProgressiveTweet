@@ -93,6 +93,7 @@ namespace ProgressiveTweet.Models
                 var token = Model.Instance.CurrentToken;
                 if (HasMedia)
                 {
+                    foreach (var stream in Media) stream.Seek(0, System.IO.SeekOrigin.Begin); // sent data will be 0 byte without this
                     var response = Media.Select(p => token.Media.Upload(media => p));
                     token.Statuses.Update(status => Text, media_ids => response.Select(p => p.MediaId));
                 }

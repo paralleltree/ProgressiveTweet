@@ -19,6 +19,7 @@ namespace ProgressiveTweet.Views.Converters
             var stream = value as Stream;
             if (stream == null) return null;
 
+            stream.Seek(0, SeekOrigin.Begin); // NotSupportedException will be thrown without this
             var image = new BitmapImage();
             image.BeginInit();
             image.StreamSource = stream;
