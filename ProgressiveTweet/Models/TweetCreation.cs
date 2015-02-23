@@ -24,9 +24,27 @@ namespace ProgressiveTweet.Models
             {
                 _text = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged("IsValid");
+                RaisePropertyChanged("RemainingLength");
             }
         }
         private string _text;
+
+        /// <summary>
+        /// 入力可能な残り文字数を取得します。
+        /// </summary>
+        public int RemainingLength
+        {
+            get { return TwitterText.GetRemainingTweetLength(Text); }
+        }
+
+        /// <summary>
+        /// 現在のツイートが有効であるかどうかを示す値を取得します。
+        /// </summary>
+        public bool IsValid
+        {
+            get { return TwitterText.IsValidTweet(Text); }
+        }
 
         /// <summary>
         /// ツイートが送信されたかどうかを示す値を取得します。
